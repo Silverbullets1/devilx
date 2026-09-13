@@ -1,633 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>DevilX — High-Performance Web & Local Growth Systems</title>
-<meta name="description" content="Custom web infrastructure, sub-second mobile booking platforms, and local search dominance for US private practices and contractors." />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="DevilX — personal portfolio of Amit Kumar Mishra: security research tooling, web automation, and open-source projects.">
+<title>DevilX — Developer Portfolio &amp; Projects</title>
 <style>
-:root {
---bg: #070709;
---card: rgba(16, 16, 22, 0.78);
---border: rgba(255, 60, 0, 0.2);
---accent: #ff3c00;
---accent-glow: rgba(255, 60, 0, 0.4);
---star: #ffb800;
---text: #f0f0f5;
---muted: #8b8c96;
---font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
---font-mono: "SF Mono", "Fira Code", monospace;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-background-color: var(--bg);
-color: var(--text);
-font-family: var(--font-sans);
-overflow-x: hidden;
-line-height: 1.55;
-}
-
-/* --- Cyber Ring Loader --- */
-#loader {
-position: fixed;
-inset: 0;
-background: var(--bg);
-z-index: 1000;
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-transition: opacity 0.6s ease, visibility 0.6s;
-}
-.ring-container {
-position: relative;
-width: 120px;
-height: 120px;
-display: flex;
-align-items: center;
-justify-content: center;
-}
-.ring {
-position: absolute;
-border-radius: 50%;
-border: 2px solid transparent;
-}
-.ring-1 { width: 110px; height: 110px; border-top-color: var(--accent); animation: spin 1.8s linear infinite; }
-.ring-2 { width: 80px; height: 80px; border-right-color: #fff; animation: spin 2.4s linear reverse infinite; }
-.ring-3 { width: 50px; height: 50px; border-bottom-color: var(--accent); animation: spin 1.1s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
-.loader-counter {
-font-family: var(--font-mono);
-font-size: 1rem;
-font-weight: 700;
-color: var(--accent);
-margin-top: 1.2rem;
-letter-spacing: 0.2em;
-}
-@keyframes spin { 100% { transform: rotate(360deg); } }
-
-/* --- Canvas 3D Background --- */
-#webgl-canvas {
-position: fixed;
-top: 0;
-left: 0;
-width: 100vw;
-height: 100vh;
-z-index: 0;
-pointer-events: none;
-}
-
-/* --- Navigation --- */
-nav {
-position: fixed;
-top: 0;
-width: 100%;
-display: flex;
-justify-content: space-between;
-align-items: center;
-padding: 1.1rem clamp(1.5rem, 5vw, 4rem);
-background: rgba(7, 7, 9, 0.9);
-backdrop-filter: blur(16px);
-border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-z-index: 100;
-}
-.brand {
-font-size: 1.25rem;
-font-weight: 900;
-letter-spacing: 0.25em;
-color: #fff;
-}
-.brand span { color: var(--accent); }
-.nav-stats {
-font-family: var(--font-mono);
-font-size: 0.75rem;
-display: flex;
-align-items: center;
-gap: 0.6rem;
-color: #00ff88;
-background: rgba(0, 255, 136, 0.08);
-border: 1px solid rgba(0, 255, 136, 0.2);
-padding: 0.35rem 0.85rem;
-border-radius: 99px;
-}
-.nav-stats::before {
-content: "";
-width: 6px;
-height: 6px;
-border-radius: 50%;
-background: #00ff88;
-box-shadow: 0 0 8px #00ff88;
-}
-
-/* --- Content Structure --- */
-main {
-position: relative;
-z-index: 10;
-padding: 0 clamp(1.5rem, 5vw, 4rem);
-max-width: 1220px;
-margin: 0 auto;
-}
-.hero {
-min-height: 85vh;
-display: flex;
-flex-direction: column;
-justify-content: center;
-padding-top: 6.5rem;
-}
-.kicker {
-font-family: var(--font-mono);
-font-size: 0.8rem;
-letter-spacing: 0.2em;
-color: var(--accent);
-text-transform: uppercase;
-margin-bottom: 1rem;
-display: flex;
-align-items: center;
-gap: 0.7rem;
-}
-.kicker::before {
-content: "";
-width: 22px;
-height: 2px;
-background: var(--accent);
-}
-h1 {
-font-size: clamp(2.5rem, 5.5vw, 5.2rem);
-font-weight: 800;
-line-height: 1.05;
-letter-spacing: -0.035em;
-margin-bottom: 1.4rem;
-max-width: 950px;
-}
-h1 em {
-font-style: normal;
-background: linear-gradient(135deg, #fff 45%, var(--accent) 100%);
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-}
-.subtitle {
-font-size: clamp(1rem, 1.25vw, 1.2rem);
-color: var(--muted);
-max-width: 640px;
-margin-bottom: 2.2rem;
-}
-.cta-group {
-display: flex;
-gap: 1rem;
-flex-wrap: wrap;
-align-items: center;
-}
-.btn {
-font-family: var(--font-mono);
-font-size: 0.85rem;
-font-weight: 600;
-padding: 0.85rem 1.8rem;
-border-radius: 6px;
-text-decoration: none;
-transition: all 0.25s ease;
-cursor: pointer;
-display: inline-flex;
-align-items: center;
-gap: 0.5rem;
-}
-.btn-primary {
-background: var(--accent);
-color: #fff;
-border: 1px solid var(--accent);
-box-shadow: 0 4px 18px var(--accent-glow);
-}
-.btn-primary:hover {
-background: #ff5018;
-transform: translateY(-2px);
-box-shadow: 0 6px 24px rgba(255, 60, 0, 0.55);
-}
-.btn-secondary {
-background: transparent;
-color: var(--text);
-border: 1px solid rgba(255, 255, 255, 0.18);
-}
-.btn-secondary:hover {
-border-color: #fff;
-background: rgba(255, 255, 255, 0.05);
-}
-
-/* --- Trust Metric Counters --- */
-.trust-strip {
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-gap: 1.5rem;
-padding: 2.5rem 0;
-border-top: 1px solid rgba(255, 255, 255, 0.08);
-border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-margin: 3.5rem 0 5rem;
-}
-.metric-item {
-display: flex;
-flex-direction: column;
-}
-.metric-number {
-font-family: var(--font-mono);
-font-size: 2.4rem;
-font-weight: 800;
-color: #fff;
-display: flex;
-align-items: baseline;
-gap: 0.2rem;
-}
-.metric-number span { color: var(--accent); }
-.metric-label {
-font-size: 0.8rem;
-text-transform: uppercase;
-letter-spacing: 0.12em;
-color: var(--muted);
-margin-top: 0.2rem;
-}
-
-/* --- Section Styling --- */
-.section-head {
-margin-bottom: 2.5rem;
-}
-.section-head h2 {
-font-size: clamp(1.8rem, 3.2vw, 2.7rem);
-letter-spacing: -0.03em;
-}
-
-/* --- Client Reviews (Detailed Proof) --- */
-.reviews-grid {
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
-gap: 1.8rem;
-margin-bottom: 6rem;
-}
-.review-card {
-background: var(--card);
-backdrop-filter: blur(14px);
-border: 1px solid var(--border);
-border-radius: 12px;
-padding: 2rem;
-display: flex;
-flex-direction: column;
-justify-content: space-between;
-transition: all 0.3s ease;
-}
-.review-card:hover {
-border-color: var(--accent);
-transform: translateY(-4px);
-}
-.stars {
-color: var(--star);
-font-size: 1.05rem;
-margin-bottom: 1rem;
-letter-spacing: 0.15em;
-}
-.quote {
-font-size: 0.95rem;
-color: #d1d2dc;
-line-height: 1.6;
-margin-bottom: 1.5rem;
-}
-.client-meta {
-display: flex;
-align-items: center;
-gap: 0.9rem;
-border-top: 1px solid rgba(255, 255, 255, 0.08);
-padding-top: 1.2rem;
-}
-.avatar-initials {
-width: 42px;
-height: 42px;
-border-radius: 50%;
-background: rgba(255, 60, 0, 0.15);
-border: 1px solid var(--accent);
-color: var(--accent);
-font-family: var(--font-mono);
-font-weight: 700;
-display: flex;
-align-items: center;
-justify-content: center;
-font-size: 0.85rem;
-}
-.client-info h4 {
-font-size: 0.95rem;
-color: #fff;
-}
-.client-info p {
-font-size: 0.78rem;
-color: var(--muted);
-}
-
-/* --- Completed Deliverables / Work Done --- */
-.projects-grid {
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-gap: 1.6rem;
-margin-bottom: 6rem;
-}
-.project-card {
-background: rgba(14, 14, 18, 0.7);
-border: 1px solid rgba(255, 255, 255, 0.08);
-border-radius: 10px;
-padding: 1.8rem;
-transition: border-color 0.25s ease;
-}
-.project-card:hover {
-border-color: rgba(255, 255, 255, 0.3);
-}
-.project-tag {
-font-family: var(--font-mono);
-font-size: 0.7rem;
-color: #00ff88;
-letter-spacing: 0.1em;
-text-transform: uppercase;
-margin-bottom: 0.6rem;
-}
-.project-card h3 {
-font-size: 1.2rem;
-margin-bottom: 0.6rem;
-}
-.project-card p {
-font-size: 0.88rem;
-color: var(--muted);
-margin-bottom: 1.2rem;
-}
-.project-stats {
-font-family: var(--font-mono);
-font-size: 0.82rem;
-display: flex;
-justify-content: space-between;
-border-top: 1px solid rgba(255, 255, 255, 0.06);
-padding-top: 0.8rem;
-color: #fff;
-}
-
-/* --- Footer --- */
-footer {
-border-top: 1px solid rgba(255, 255, 255, 0.08);
-padding: 2.5rem 0 3.5rem;
-display: flex;
-justify-content: space-between;
-align-items: center;
-flex-wrap: wrap;
-gap: 1rem;
-font-size: 0.8rem;
-color: var(--muted);
-}
-footer span { font-family: var(--font-mono); }
+:root{--bg:#0b0f14;--card:#11171f;--ink:#e6edf3;--mut:#8b98a5;--acc:#3fb950;--acc2:#58a6ff;--line:#1f2733}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:"Segoe UI",system-ui,-apple-system,sans-serif;line-height:1.6}
+.wrap{max-width:860px;margin:0 auto;padding:56px 24px}
+header .tag{display:inline-block;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--acc);border:1px solid var(--acc);border-radius:999px;padding:4px 14px;margin-bottom:22px}
+h1{font-size:42px;line-height:1.15;font-weight:800}
+h1 .hl{background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--mut);font-size:18px;margin-top:14px;max-width:640px}
+h2{font-size:14px;letter-spacing:2px;text-transform:uppercase;color:var(--mut);margin:52px 0 18px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
+.card h3{font-size:17px;margin-bottom:6px}
+.card .k{font-size:12px;color:var(--acc2);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.card p{font-size:14.5px;color:var(--mut)}
+.card a{color:var(--acc2);text-decoration:none;font-size:14px;font-weight:600}
+.card a:hover{text-decoration:underline}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.badge{font-size:12.5px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 12px;color:var(--mut)}
+footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:var(--mut);font-size:14px;display:flex;gap:18px;flex-wrap:wrap}
+footer a{color:var(--acc2);text-decoration:none}
 </style>
 </head>
 <body>
+<div class="wrap">
+<header>
+  <span class="tag">Portfolio</span>
+  <h1>Hi, I&#39;m <span class="hl">DevilX</span>.</h1>
+  <p class="lead">Amit Kumar Mishra — developer interested in security research, web automation and data tooling. This page collects a few of the open-source projects and experiments I&#39;ve been building.</p>
+  <div class="badges">
+    <span class="badge">Python</span><span class="badge">JavaScript</span><span class="badge">Web Scraping &amp; Automation</span><span class="badge">Security Research</span><span class="badge">Linux / Self-hosting</span>
+  </div>
+</header>
 
-<!-- Loading Screen -->
-<div id="loader">
-<div class="ring-container">
-<div class="ring ring-1"></div>
-<div class="ring ring-2"></div>
-<div class="ring ring-3"></div>
-</div>
-<div class="loader-counter" id="load-count">00%</div>
-</div>
-
-<!-- Interactive 3D WebGL Background -->
-<canvas id="webgl-canvas"></canvas>
-
-<nav>
-<div class="brand">DEVIL<span>X</span></div>
-<div class="nav-stats">Q3 BOOKINGS OPEN · 48H HANDOVER</div>
-</nav>
-
-<main>
-<!-- Hero Section -->
-<section class="hero">
-<div class="kicker">Engineered For Conversion</div>
-<h1>High-performance websites that turn <em>local searches</em> into booked revenue.</h1>
-<p class="subtitle">
-We replace slow, abandoned WordPress sites with modern, lightning-fast 3D digital front doors for private medical practices, boutique fitness gyms, and residential remodelers across the US.
-</p>
-<div class="cta-group">
-<a href="#reviews" class="btn btn-primary">Client Feedback & Proof ↓</a>
-<a href="#portfolio" class="btn btn-secondary">Completed Systems</a>
-</div>
-</section>
-
-<!-- Trust Numbers Strip -->
-<section class="trust-strip">
-<div class="metric-item">
-<div class="metric-number">47<span>+</span></div>
-<div class="metric-label">US Businesses Modernized</div>
-</div>
-<div class="metric-item">
-<div class="metric-number">48<span>h</span></div>
-<div class="metric-label">Average Staging Turnaround</div>
-</div>
-<div class="metric-item">
-<div class="metric-number">4.9<span>/5</span></div>
-<div class="metric-label">Client Satisfaction Score</div>
-</div>
-<div class="metric-item">
-<div class="metric-number">100<span>%</span></div>
-<div class="metric-label">Schema & Mobile-Pass Rate</div>
-</div>
-</section>
-
-<!-- Client Reviews Section (Closing Confidence) -->
-<section id="reviews">
-<div class="section-head">
-<div class="kicker">Verified Client Feedback</div>
-<h2>What Practice Owners & Directors Say</h2>
+<h2>Projects</h2>
+<div class="grid">
+  <div class="card">
+    <div class="k">Apify Actor · Open Source</div>
+    <h3>B2B Contact Resolver</h3>
+    <p>A small web automation tool that walks a company site — contact page, privacy pages, footer — and collects the publicly published mailto links and phone numbers. No third-party databases, no scraping behind logins.</p>
+    <a href="https://apify.com/devilx-tools/b2b-contact-resolver">View in Apify Store →</a>
+  </div>
+  <div class="card">
+    <div class="k">Security Research</div>
+    <h3>Vulnerability Write-ups</h3>
+    <p>Bug-bounty research published as public disclosures on HackerOne — injection classes, storage and XSS edge cases, and responsible-disclosure notes on open-source plugins.</p>
+    <a href="https://hackerone.com/devilx">hackerone.com/devilx →</a>
+  </div>
+  <div class="card">
+    <div class="k">Open Source</div>
+    <h3>GitHub Work</h3>
+    <p>Experiments and contributions: browser automation utilities, CLI tooling, and small web apps. Most of it lives in the open on my profile.</p>
+    <a href="https://github.com/Silverbullets1">github.com/Silverbullets1 →</a>
+  </div>
 </div>
 
-<div class="reviews-grid">
-<!-- Review 1: Dental Practice -->
-<div class="review-card">
-<div>
-<div class="stars">★★★★★</div>
-<p class="quote">
-"Our old site was built in 2018 and didn't even have a clickable phone number for mobile visitors. DevilX rebuilt our entire booking flow in under 48 hours. New patient appointment requests jumped 38% in our first month alone."
-</p>
-</div>
-<div class="client-meta">
-<div class="avatar-initials">AP</div>
-<div class="client-info">
-<h4>Apex Dental Studio</h4>
-<p>Private practice demo profile · Denver, CO</p>
-</div>
-</div>
-</div>
-
-<!-- Review 2: Boutique Fitness -->
-<div class="review-card">
-<div>
-<div class="stars">★★★★★</div>
-<p class="quote">
-"We were running the gym purely through Instagram and an outdated directory listing. The interactive 3D portal they staged for us made our brand look like an elite national franchise. The $192 deposit was paid back on day two."
-</p>
-</div>
-<div class="client-meta">
-<div class="avatar-initials">VA</div>
-<div class="client-info">
-<h4>Vanguard Athletic Club</h4>
-<p>Boutique gym demo profile · Austin, TX</p>
-</div>
-</div>
-</div>
-
-<!-- Review 3: Remodeling Contractor -->
-<div class="review-card">
-<div>
-<div class="stars">★★★★★</div>
-<p class="quote">
-"Most agencies charge $5,000 upfront and take 3 months of excuses. DevilX gave us a working staging link within 48 hours, fixed our Google LocalBusiness schema, and our estimate requests skyrocketed. Zero hassle."
-</p>
-</div>
-<div class="client-meta">
-<div class="avatar-initials">EH</div>
-<div class="client-info">
-<h4>Elevate Home Works</h4>
-<p>Contractor demo profile · Dallas, TX</p>
-</div>
-</div>
-</div>
-</div>
-</section>
-
-<!-- Completed Tasks & Deliverables -->
-<section id="portfolio">
-<div class="section-head">
-<div class="kicker">Recent Deployments</div>
-<h2>Completed Client Systems</h2>
-</div>
-
-<div class="projects-grid">
-<div class="project-card">
-<div class="project-tag">COMPLETED · 48H SPRINT</div>
-<h3>Cosmetic & Family Dental Portal</h3>
-<p>Overhauled legacy HTML structure with high-speed mobile click-to-call integrations, patient review widgets, and full local search indexing.</p>
-<div class="project-stats">
-<span>Performance Gain</span>
-<span style="color:#00ff88">99/100 Mobile Speed</span>
-</div>
-</div>
-
-<div class="project-card">
-<div class="project-tag">COMPLETED · ZERO-TO-ONE</div>
-<h3>Athletic Club & Class Booking HQ</h3>
-<p>Engineered responsive web headquarters with class schedule embeds, coach profiles, and member registration funnel.</p>
-<div class="project-stats">
-<span>Delivery Time</span>
-<span style="color:#00ff88">36 Hours Verified</span>
-</div>
-</div>
-
-<div class="project-card">
-<div class="project-tag">COMPLETED · SCHEMA UPGRADE</div>
-<h3>High-Ticket Residential Remodeling</h3>
-<p>Created interactive project portfolio gallery, instant quote calculator, and automated lead notification routing.</p>
-<div class="project-stats">
-<span>Lead Flow</span>
-<span style="color:#00ff88">+42% Form Submissions</span>
-</div>
-</div>
-</div>
-</section>
+<h2>About</h2>
+<p class="lead" style="margin-top:0">I build things that parse, crawl and verify — mostly for myself first. This is a personal, non-commercial site showcasing a few of those projects. When something works well, I write it up and share it.</p>
 
 <footer>
-<div>DEVILX DIGITAL INFRASTRUCTURE © 2026</div>
-<span>DEPLOYED VIA SECURE REPOSITORY</span>
+  <span>© 2026 Amit Kumar Mishra (DevilX)</span>
+  <a href="https://github.com/Silverbullets1">GitHub</a>
+  <a href="https://hackerone.com/devilx">HackerOne</a>
+  <a href="https://apify.com/devilx-tools">Apify</a>
 </footer>
-</main>
-
-<script>
-// --- 1. Ring Loader Simulation ---
-let progress = 0;
-const counter = document.getElementById('load-count');
-const loader = document.getElementById('loader');
-
-const interval = setInterval(() => {
-progress += Math.floor(Math.random() * 8) + 5;
-if (progress > 100) progress = 100;
-counter.innerText = (progress < 10 ? '0' : '') + progress + '%';
-if (progress === 100) {
-clearInterval(interval);
-setTimeout(() => {
-loader.style.opacity = '0';
-setTimeout(() => loader.style.display = 'none', 600);
-}, 200);
-}
-}, 35);
-
-// --- 2. Interactive 3D Cyber Core (Three.js) ---
-const canvas = document.getElementById('webgl-canvas');
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 6.5;
-
-const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-// Outer Torus Knot
-const knotGeo = new THREE.TorusKnotGeometry(1.3, 0.38, 100, 16);
-const knotMat = new THREE.MeshBasicMaterial({
-color: 0xff3c00,
-wireframe: true,
-transparent: true,
-opacity: 0.28
-});
-const torusKnot = new THREE.Mesh(knotGeo, knotMat);
-scene.add(torusKnot);
-
-// Inner Glowing Core
-const coreGeo = new THREE.IcosahedronGeometry(0.8, 1);
-const coreMat = new THREE.MeshBasicMaterial({
-color: 0xffffff,
-wireframe: true,
-transparent: true,
-opacity: 0.35
-});
-const coreMesh = new THREE.Mesh(coreGeo, coreMat);
-scene.add(coreMesh);
-
-// Orbiting Particles
-const partCount = 350;
-const partGeo = new THREE.BufferGeometry();
-const posArr = new Float32Array(partCount * 3);
-for (let i = 0; i < partCount * 3; i++) {
-posArr[i] = (Math.random() - 0.5) * 15;
-}
-partGeo.setAttribute('position', new THREE.BufferAttribute(posArr, 3));
-const partMat = new THREE.PointsMaterial({ size: 0.024, color: 0xff3c00, transparent: true, opacity: 0.6 });
-const particles = new THREE.Points(partGeo, partMat);
-scene.add(particles);
-
-// Mouse Tracking Parallax
-let targetX = 0, targetY = 0;
-window.addEventListener('mousemove', (e) => {
-targetX = (e.clientX / window.innerWidth - 0.5) * 1.6;
-targetY = (e.clientY / window.innerHeight - 0.5) * 1.6;
-});
-
-function animate() {
-requestAnimationFrame(animate);
-torusKnot.rotation.x += 0.0025;
-torusKnot.rotation.y += 0.004;
-coreMesh.rotation.x -= 0.003;
-coreMesh.rotation.y -= 0.003;
-particles.rotation.y += 0.0006;
-
-torusKnot.position.x += (targetX - torusKnot.position.x) * 0.05;
-torusKnot.position.y += (-targetY - torusKnot.position.y) * 0.05;
-coreMesh.position.x = torusKnot.position.x;
-coreMesh.position.y = torusKnot.position.y;
-
-renderer.render(scene, camera);
-}
-animate();
-
-window.addEventListener('resize', () => {
-camera.aspect = window.innerWidth / window.innerHeight;
-camera.updateProjectionMatrix();
-renderer.setSize(window.innerWidth, window.innerHeight);
-});
-</script>
+</div>
 </body>
 </html>
